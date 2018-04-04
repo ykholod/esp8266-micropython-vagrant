@@ -10,6 +10,12 @@ Vagrant.configure(2) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
+  # Add some naming staff
+  config.vm.provider :virtualbox do |vb|
+    vb.name = "project"
+  end
+  config.vm.hostname = "coldsoft"
+
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "ubuntu/trusty64"
@@ -33,6 +39,8 @@ Vagrant.configure(2) do |config|
     git clone --recursive https://github.com/pfalcon/esp-open-sdk.git
     git clone --recursive https://github.com/espressif/esp-idf.git
     git clone https://github.com/ykholod/micropython
+    cd micropython/
+    git submodule update --init
     cd ~
     echo "Installing esptool"
     sudo apt-get install -y python-setuptools
