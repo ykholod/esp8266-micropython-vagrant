@@ -9,6 +9,7 @@ Many thanks to the contributors of ESP open SDK & MicroPython for making their e
 You must have the following software installed:
 
 *  [VirtualBox](https://www.virtualbox.org/)
+*  [VirtualBoxExtensionPack](https://www.virtualbox.org/)
 *  [Vagrant](https://www.vagrantup.com/)
 
 # Usage
@@ -33,6 +34,8 @@ already been cloned:
 
 *   [esptool](https://github.com/themadinventor/esptool) - This python script flashes ESP8266 ASIC with custom image.
 
+*   and many others very important and useful tools, like ampy, pyserial, etc
+
 ## Project Compilation
 
 You will want to first compile the ESP open SDK and MicroPython into single combined binary. Please use automator for this:
@@ -42,16 +45,29 @@ You will want to first compile the ESP open SDK and MicroPython into single comb
 
 Compilation will take about 30 minutes to an hour or more depending on the speed of your machine.
 
-## Stopping & Starting the VM
+## Connect NodeMCU to VM
 
-To stop the VM make sure you've exited from any SSH session on it (run the `exit`  command) and then run this command inside the directory with the Vagrantfile:
+To connect NodeMCU to your VM you need to update Vagrantfile with USB vendorId and producerId.
+Go to host machine terminal and run:
 
-    vagrant halt
+    VBoxManage list usbhost
 
-To start the VM and SSH into it again just run:
+Now attach NodeMCU to USB port, wait for 5-10 seconds and run:
 
-    vagrant up
+    VBoxManage list usbhost
+
+Find new USB connection and update Vagrantfile with new device vendorId and producerId. This will look like:
+
+    $vendor_id  = '0x10c4'
+    $product_id = '0xea60'
+
+Now, update VM with new board Id's:
+
+    vagrant provision
     vagrant ssh
+    
+Check if /dev/ttyUSB0 device is present.
+
 
 ## Flashing ESP8266 Firmware
 
@@ -60,3 +76,10 @@ To flash the MicroPython firmware to the ESP8266 you can use the same automator 
     cd ~/automator
     python automator load micropython
 
+## Vagrant Tips
+
+    vagrant up - bring-up the machine
+    vagrant ssh - ssh into the machine
+    vagrant provision - runs the provisioning script.
+    vagrant halt - shuts down the machine
+    vagrant destroy - removes every trace of the machine, deletes it.
